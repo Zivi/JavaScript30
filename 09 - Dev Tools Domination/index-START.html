@@ -18,28 +18,56 @@
     }
 
     // Regular
+    console.log('Hello world');
 
     // Interpolated
+    console.log('Hello %s', '🌐');
 
     // Styled
+    console.log('%c Code is stylish', 'color: red, background: blue');
 
     // warning!
+    console.warn('you shouldn\'t be doing this');
 
     // Error :|
+    console.error('Oh noes');
 
     // Info
+    console.info('This is informative');
 
     // Testing
+    console.assert('1' === 1, 'not equal!');
 
     // clearing
+    //console.clear();
 
     // Viewing DOM Elements
+    const p = document.querySelector('p');
+    console.dir(p);
 
     // Grouping together
+    dogs.forEach(dog => {
+      console.group(`${dog.name}`);
+        console.log(`This is ${dog.name}`);
+        console.log(`${dog.name} is ${dog.age} years old`);
+      console.groupEnd();
+    })
 
     // counting
+    console.count('Loki');
+    console.count('Loki');
+    console.count('Keebler');
+    console.count('Loki');
+    console.count('Loki');
 
     // timing
+    console.time('Fetching Data');
+    fetch('https://api.github.com/users/zivi')
+      .then(data => data.json)
+      .then(data => {
+        console.timeEnd('fetching data');
+        console.log(data);
+      })
 
   </script>
 </body>
