@@ -1,11 +1,16 @@
-var videoPlayer = document.getElementsByTagName('video')[0];
-var progress = document.querySelector('.progress');
-var progressFilled = document.querySelector('.progress__filled');
-var play = document.querySelector('.toggle');
-var skip25 = document.querySelector('[data-skip="25"]');
-var back10 = document.querySelector('[data-skip="-10"]');
-var volume = document.getElementsByName('volume')[0];
-var playbackRate = document.getElementsByName('playbackRate')[0];
+const videoPlayer = document.getElementsByTagName('video')[0];
+const progress = document.querySelector('.progress');
+const progressFilled = document.querySelector('.progress__filled');
+const play = document.querySelector('.toggle');
+const skipButtons = document.querySelectorAll('[data-skip]');
+const volume = document.getElementsByName('volume')[0];
+const playbackRate = document.getElementsByName('playbackRate')[0];
+var playProgressRate = null;
+var unPlayed = true;
+var progressStatus = 0;
+
+videoPlayer.addEventListener('timeupdate', updateStatusBar);
+progress.addEventListener('click', scrub);
 
 videoPlayer.volume = 0.5
 volume.onmousemove = () => {
@@ -21,6 +26,7 @@ play.onclick = () => {
     videoPlayer.play();
     videoPlayer.paused = false;
     play.textContent = '❚❚';
+    unPlayed = false;
   } else {
     videoPlayer.pause();
     videoPlayer.paused = true;
@@ -28,10 +34,20 @@ play.onclick = () => {
   }
 }
 
-skip25.onclick = () => {
-  videoPlayer.currentTime += 25;
+function updateStatusBar() {
+  const percent = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+  progressFilled.style.flexBasis = `${percent}%`;
 }
 
-back10.onclick = () => {
-  videoPlayer.currentTime -= 10;
+function scrub(event) {
+  var scrubTime = (event.offsetX / progress.offsetWidth) * videoPlayer.duration;
+  videoPlayer.currentTime = scrubTime;
+}
+
+skipButtons.forEach(button => button.addEventListener('click', skip));
+var skip = () => {
+  let skiptime = parseFloat(this.dataset.skip);
+  videoPlayer.currentTime += skiptime;
+  progressStatus += (playProgressRate * skiptime);
+  progressFilled.style.flexBasis = `${progressStatus}%`;
 }
